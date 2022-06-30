@@ -13,17 +13,14 @@ public class Application {
 
 		HashMap<Integer, Integer> diceValueMap;
 
-		int score = 0;
 		int count = 0;
 
-		// Simulate 10,000
-		while (count < 1) {
-
+		while (count < _SIMULATION) {
+			int score = 0;
 			// populate dice roll
 			diceArray = (ArrayList<Integer>) populateDiceArray(5);
 			
-			int roll = 0;
-			System.out.println("Roll: " + roll + " - dice value: " + diceArray + " with size of " + diceArray.size());
+			System.out.println("Dice value: " + diceArray + " with size of " + diceArray.size());
 			System.out.println();
 
 			diceArray = CheckForThree(diceArray);
@@ -31,34 +28,7 @@ public class Application {
 			
 			// populate dice roll
 			diceArray = (ArrayList<Integer>) populateDiceArray(diceArray.size());
-
-			// iterate through our dice array to check for values and score
-			for (int i = 0; i < diceArray.size(); i++) {
-
-				// check each roll value
-				if (diceArray.get(i) == 3) {
-					System.out.println("A 3 is rolled, will be removed from the board. Score is 0");
-					diceArray.remove(i);
-					break;
-				} else if (diceArray.get(i) == 1) {
-					System.out.println("value is 1. This is the lowest value. Awarded a score of 1");
-					diceArray.remove(i);
-					score += 1;
-					break;
-				} else if (diceArray.get(i) == 2) {
-					System.out.println("value is 2. Awarded a score of 2");
-					diceArray.remove(i);
-					score += 2;
-					break;
-				} else {
-					System.out.println("value is " + diceArray.get(i) + ". Awarded a score of " + diceArray.get(i));
-					diceArray.remove(i);
-					score += diceArray.get(i);
-				}
-			}
-
-			roll++;
-			System.out.println();
+			score = GetScore(diceArray, score);
 
 			System.out.println("after round... " + diceArray);
 			System.out.println("Your score is: " + score);
@@ -77,7 +47,6 @@ public class Application {
 		for (int i = 0; i < size; i++) {
 			n = rand.nextInt(6) + 1;
 			roll.add(n);
-			// System.out.println(roll.get(i));
 		}
 
 		return roll;
@@ -93,18 +62,18 @@ public class Application {
 			System.out.println("dice value: " + dice.get(i));
 
 			// check each roll value
-			if (dice.get(i) == 3) {
-				System.out.println("A 3 is rolled, will be removed from the board");
-				dice.remove(i);
-				System.out.println("dice value after 3 is taken off: " + dice);
-			} else if (dice.get(i) == 1) {
-				System.out.println("value is 1. This is the lowest value. Awarded a score of 2");
+			if (dice.get(i) == 1) {
+				System.out.println("value is 1. This is the lowest value. Awarded a score of 1");
 				dice.remove(i);
 				newScore += 1;
 			} else if (dice.get(i) == 2) {
-				System.out.println("value is 2. Awarded a score of 1");
+				System.out.println("value is 2. Awarded a score of 2");
 				dice.remove(i);
 				newScore += 2;
+			}
+			else {
+				System.out.println("value is " + dice.get(i) + ". Awarded a score of " + dice.get(i));
+				dice.remove(i);
 			}
 		}
 
