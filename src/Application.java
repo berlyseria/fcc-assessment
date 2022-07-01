@@ -3,44 +3,45 @@ import java.util.Random;
 
 public class Application {
 
-	final int _SIMULATION = 10000;
+	final static int _SIMULATION = 10000;
 	static int score = 0;
 	static ArrayList<Integer> dice = new ArrayList<>();
 
 	public static void main(String[] args) {
 
-		dice.add(3);
-		dice.add(1);
-		dice.add(3);
-		dice.add(6);
-		dice.add(6);
-
+		
 		int count = 0;
-		while (count < 1) {
+		while (count < _SIMULATION) {
 
+			dice = (ArrayList<Integer>) PopulateDiceRoll(5);
+			
 			int roll = 1;
 			boolean newRoll = true;
 
 			// populate dice roll
-			// diceArray = (ArrayList<Integer>) PopulateDiceRoll(5);
 			while (newRoll) {
 				newRoll = CheckAndRoll(roll);
 				System.out.println("Your score is: " + score);
 				roll++;
 			}
+			
 			count++;
+			
+			// reset score for next iteration
+			score = 0;
+			System.out.println();
 		}
 
 	}
 
-	public static ArrayList<Integer> PopulateDiceRoll() {
+	public static ArrayList<Integer> PopulateDiceRoll(int size) {
 
 		Random rand = new Random();
 		int n;
 
-		ArrayList<Integer> diceRoll = new ArrayList<Integer>(dice.size());
+		ArrayList<Integer> diceRoll = new ArrayList<Integer>(size);
 
-		for (int i = 0; i < dice.size(); i++) {
+		for (int i = 0; i < size; i++) {
 			n = rand.nextInt(6) + 1;
 			diceRoll.add(n);
 		}
@@ -64,7 +65,7 @@ public class Application {
 			}
 
 			if (dice.size() > 0) {
-				dice = PopulateDiceRoll();
+				dice = PopulateDiceRoll(dice.size());
 				return true;
 			}
 
@@ -73,47 +74,61 @@ public class Application {
 			int lowest = dice.get(0);
 
 			for (int i = 0; i < dice.size(); i++) {
+				// get the lowest value
+				if(lowest >= dice.get(i)) {
+					lowest = dice.get(i);
+				}
+			}
+			
+			System.out.println("lowest: " + lowest);
+			for (int i = 0; i < dice.size(); i++) {
 
-				switch (dice.get(i)) {
-				case 1:
+				if(lowest == 1) {
 					dice.remove(i);
 					UpdateScore(1);
 
 					if (dice.size() > 0) {
-						dice = PopulateDiceRoll();
+						dice = PopulateDiceRoll(dice.size());
 						return true;
 					}
-				case 2:
+				}
+				
+				if(lowest == 2) {
 					dice.remove(i);
 					UpdateScore(2);
 
 					if (dice.size() > 0) {
-						dice = PopulateDiceRoll();
+						dice = PopulateDiceRoll(dice.size());
 						return true;
 					}
-				case 4:
+				}
+				
+				if(lowest == 4) {
 					dice.remove(i);
 					UpdateScore(4);
 
 					if (dice.size() > 0) {
-						dice = PopulateDiceRoll();
+						dice = PopulateDiceRoll(dice.size());
 						return true;
 					}
-
-				case 5:
+				}
+				
+				if(lowest == 5) {
 					dice.remove(i);
 					UpdateScore(5);
 
 					if (dice.size() > 0) {
-						dice = PopulateDiceRoll();
+						dice = PopulateDiceRoll(dice.size());
 						return true;
 					}
-				case 6:
+				}
+				
+				if(lowest == 6) {
 					dice.remove(i);
 					UpdateScore(6);
 
 					if (dice.size() > 0) {
-						dice = PopulateDiceRoll();
+						dice = PopulateDiceRoll(dice.size());
 						return true;
 					}
 				}
