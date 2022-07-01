@@ -1,95 +1,130 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class Application {
 
+	final int _SIMULATION = 10000;
+	static int score = 0;
+	static ArrayList<Integer> dice = new ArrayList<>();
+
 	public static void main(String[] args) {
 
-		final int _SIMULATION = 10000;
-
-		ArrayList<Integer> diceArray;
-
-		HashMap<Integer, Integer> diceValueMap;
+		dice.add(3);
+		dice.add(1);
+		dice.add(3);
+		dice.add(6);
+		dice.add(6);
 
 		int count = 0;
+		while (count < 1) {
 
-		while (count < _SIMULATION) {
-			int score = 0;
+			int roll = 1;
+			boolean newRoll = true;
+
 			// populate dice roll
-			diceArray = (ArrayList<Integer>) populateDiceArray(5);
-			
-			System.out.println("Dice value: " + diceArray + " with size of " + diceArray.size());
-			System.out.println();
-
-			diceArray = CheckForThree(diceArray);
-			System.out.println("Three's were removed. Score is 0");
-			
-			// populate dice roll
-			diceArray = (ArrayList<Integer>) populateDiceArray(diceArray.size());
-			score = GetScore(diceArray, score);
-
-			System.out.println("after round... " + diceArray);
-			System.out.println("Your score is: " + score);
+			// diceArray = (ArrayList<Integer>) PopulateDiceRoll(5);
+			while (newRoll) {
+				newRoll = CheckAndRoll(roll);
+				System.out.println("Your score is: " + score);
+				roll++;
+			}
 			count++;
 		}
 
 	}
 
-	public static List<Integer> populateDiceArray(int size) {
+	public static ArrayList<Integer> PopulateDiceRoll() {
 
 		Random rand = new Random();
 		int n;
 
-		ArrayList<Integer> roll = new ArrayList<Integer>(5);
-
-		for (int i = 0; i < size; i++) {
-			n = rand.nextInt(6) + 1;
-			roll.add(n);
-		}
-
-		return roll;
-	}
-
-	public static int GetScore(ArrayList<Integer> diceArray, int score) {
-
-		int newScore = score;
-		ArrayList<Integer> dice = diceArray;
-
-		for (int i = 0; i < diceArray.size(); i++) {
-
-			System.out.println("dice value: " + dice.get(i));
-
-			// check each roll value
-			if (dice.get(i) == 1) {
-				System.out.println("value is 1. This is the lowest value. Awarded a score of 1");
-				dice.remove(i);
-				newScore += 1;
-			} else if (dice.get(i) == 2) {
-				System.out.println("value is 2. Awarded a score of 2");
-				dice.remove(i);
-				newScore += 2;
-			}
-			else {
-				System.out.println("value is " + dice.get(i) + ". Awarded a score of " + dice.get(i));
-				dice.remove(i);
-			}
-		}
-
-		return newScore;
-	}
-
-	public static ArrayList<Integer> CheckForThree(ArrayList<Integer> dice) {
+		ArrayList<Integer> diceRoll = new ArrayList<Integer>(dice.size());
 
 		for (int i = 0; i < dice.size(); i++) {
-			if (dice.get(i) == 3) {
-				dice.remove(i);
-			}
+			n = rand.nextInt(6) + 1;
+			diceRoll.add(n);
 		}
 
-		System.out.println(dice);
-		return dice;
+		return diceRoll;
+	}
+
+	public static boolean CheckAndRoll(int roll) {
+
+		// check value
+		System.out.println("Roll: " + roll + " - Dice array: " + dice);
+		if (dice.contains(3)) {
+
+			// get indexes that contains three's
+			for (int i = 0; i < dice.size(); i++) {
+				if (dice.get(i) == 3) {
+
+					// remove from list
+					dice.remove(i);
+				}
+			}
+
+			if (dice.size() > 0) {
+				dice = PopulateDiceRoll();
+				return true;
+			}
+
+		} else {
+
+			int lowest = dice.get(0);
+
+			for (int i = 0; i < dice.size(); i++) {
+
+				switch (dice.get(i)) {
+				case 1:
+					dice.remove(i);
+					UpdateScore(1);
+
+					if (dice.size() > 0) {
+						dice = PopulateDiceRoll();
+						return true;
+					}
+				case 2:
+					dice.remove(i);
+					UpdateScore(2);
+
+					if (dice.size() > 0) {
+						dice = PopulateDiceRoll();
+						return true;
+					}
+				case 4:
+					dice.remove(i);
+					UpdateScore(4);
+
+					if (dice.size() > 0) {
+						dice = PopulateDiceRoll();
+						return true;
+					}
+
+				case 5:
+					dice.remove(i);
+					UpdateScore(5);
+
+					if (dice.size() > 0) {
+						dice = PopulateDiceRoll();
+						return true;
+					}
+				case 6:
+					dice.remove(i);
+					UpdateScore(6);
+
+					if (dice.size() > 0) {
+						dice = PopulateDiceRoll();
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	public static void UpdateScore(int addScore) {
+		score += addScore;
 	}
 
 }
